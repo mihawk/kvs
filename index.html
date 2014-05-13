@@ -32,7 +32,7 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
         <h1>
-<a name="kvs-data-framework-for-kv-stores" class="anchor" href="#kvs-data-framework-for-kv-stores"><span class="octicon octicon-link"></span></a>KVS: Data Framework for KV Stores</h1>
+<a name="kvs-erlang-abstract-term-database" class="anchor" href="#kvs-erlang-abstract-term-database"><span class="octicon octicon-link"></span></a>KVS: Erlang Abstract Term Database</h1>
 
 <p>Online Presentation: <a href="http://slid.es/maximsokhatsky/kvs">http://slid.es/maximsokhatsky/kvs</a></p>
 
@@ -51,26 +51,40 @@
 <li>Supports Multiple backends at the same time</li>
 <li>Xen Ready</li>
 </ul><h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>In rebar.config:</p>
+
+<pre><code>{kvs, ".*", {git, "git://github.com/synrc/kvs", "HEAD"}}
+</code></pre>
+
+<h2>
 <a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
 
 <p>This is database handling application that hides database access
 and provides high-level rich API to stored and extend following data:</p>
 
+<p>KVS</p>
+
 <ul>
 <li>Acl</li>
 <li>Users</li>
-<li>Groups</li>
 <li>Subscriptions</li>
 <li>Feeds</li>
+<li>Entries</li>
 <li>Comments</li>
+</ul><p>KVS SOCIAL</p>
+
+<ul>
+<li>Groups</li>
 <li>Meetings</li>
 <li>Accounts</li>
 <li>Payments</li>
 <li>Products</li>
 <li>Purchases</li>
-</ul><p>This Framework provides also a Plugin for Feed Server for sequential consistency.
-All write requests with given object keys will be handled by single processes
-in Feed Server so you may not worry about concurrent changes of user feeds.</p>
+</ul><p>This Framework provides also a Feed Server Plugin for sequential consistency.
+All write requests with given object key will be handled by single processes
+in Feed Server so you may not worry about concurrent changes of user feed tops.</p>
 
 <p>All write operations that are made to data with secondary indexes,
 i.e. not like linked lists could be potentially handled without feed_server.
@@ -90,48 +104,61 @@ But some KV storages are not supporting secondary indexes add those backends car
 
 <p>First of all you need to tune your backend in the kvs application:</p>
 
-<pre><code>{kvs, {dba,store_kai}},
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="p">{</span><span class="n">kvs</span><span class="p">,</span> <span class="p">{</span><span class="n">dba</span><span class="p">,</span><span class="n">store_kai</span><span class="p">}},</span>
+</pre></div>
 
 <p>Try to check it:</p>
 
-<pre><code>1&gt; kvs:config(dba).
-store_kai
-2&gt; kvs:version().
-{version,"KVS KAI PURE XEN"}
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">config</span><span class="p">(</span><span class="n">dba</span><span class="p">).</span>
+<span class="n">store_kai</span>
+
+<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">version</span><span class="p">().</span>
+<span class="p">{</span><span class="n">version</span><span class="p">,</span><span class="s">"KVS KAI PURE XEN"</span><span class="p">}</span>
+</pre></div>
 
 <p>Create database for single node:</p>
 
-<pre><code>3&gt; kvs:join().
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">join</span><span class="p">().</span>
+<span class="p">[</span><span class="n">kvs</span><span class="p">]</span> <span class="nv">Mnesia</span> <span class="nv">Init</span>
+<span class="n">ok</span>
+<span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">init_db</span><span class="p">().</span>
+<span class="p">[{</span><span class="s">"acl"</span><span class="p">,</span><span class="n">ok</span><span class="p">},{</span><span class="s">"feed"</span><span class="p">,</span><span class="n">ok</span><span class="p">}]</span>
+</pre></div>
 
-<p>Create database joining to existing cluster:</p>
+<p>'init_db' output the creations of containers.
+You can also create database by joining to existing cluster:</p>
 
-<pre><code>3&gt; kvs:join('kvs@synrc.com').
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">join</span><span class="p">(</span><span class="n">'kvs@synrc.com'</span><span class="p">).</span>
+</pre></div>
 
-<p>Check table packages included into the schema:</p>
+<p>In that case you don't need to do 'init_db'
+To check table packages included into the schema:</p>
 
-<pre><code>4&gt; kvs:dir().
-[kvs_user,kvs_product,kvs_membership,kvs_payment,kvs_feed,
- kvs_acl,kvs_account,kvs_group]
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">dir</span><span class="p">().</span>
+<span class="p">[{</span><span class="n">table</span><span class="p">,</span><span class="s">"id_seq"</span><span class="p">},</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"subscription"</span><span class="p">},</span> <span class="o">&lt;-</span> <span class="mi">2</span><span class="n">i</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"feed"</span><span class="p">},</span> <span class="o">&lt;-</span> <span class="n">feed</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"comment"</span><span class="p">},</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"entry"</span><span class="p">},</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"access"</span><span class="p">},</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"acl"</span><span class="p">},</span> <span class="o">&lt;-</span> <span class="n">feed</span>
+ <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"user"</span><span class="p">}]</span>
+</pre></div>
 
 <h2>
 <a name="operations" class="anchor" href="#operations"><span class="octicon octicon-link"></span></a>Operations</h2>
 
 <p>Try to add some data:</p>
 
-<pre><code>1&gt; rr(kvs).
-2&gt; kvs:put(#user{id="maxim@synrc.com"}).
-ok
-3&gt; kvs:get(user,"maxim@synrc.com").
-#user{id = "maxim@synrc.com",container = feed,...}
-4&gt; kvs:put(#user{id="doxtop@synrc.com"}).
-5&gt; length(kvs:all(user)).
-2
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="n">rr</span><span class="p">(</span><span class="n">kvs</span><span class="p">).</span>
+<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nb">put</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"maxim@synrc.com"</span><span class="p">}).</span>
+<span class="n">ok</span>
+<span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nb">get</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="s">"maxim@synrc.com"</span><span class="p">).</span>
+<span class="nl">#user</span><span class="p">{</span><span class="n">id</span> <span class="o">=</span> <span class="s">"maxim@synrc.com"</span><span class="p">,</span><span class="n">container</span> <span class="o">=</span> <span class="n">feed</span><span class="p">,...}</span>
+<span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nb">put</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"doxtop@synrc.com"</span><span class="p">}).</span>
+<span class="mi">5</span><span class="o">&gt;</span> <span class="nb">length</span><span class="p">(</span><span class="nn">kvs</span><span class="p">:</span><span class="nf">all</span><span class="p">(</span><span class="n">user</span><span class="p">)).</span>
+<span class="mi">2</span>
+</pre></div>
 
 <h2>
 <a name="polymorphic-records" class="anchor" href="#polymorphic-records"><span class="octicon octicon-link"></span></a>Polymorphic Records</h2>
@@ -151,12 +178,12 @@ that supports 2i, e.g. kai, mnesia, riak.</p>
 <p>All record could be chained into the double-linked lists in the database.
 So you can inherit from the ITERATOR record just like that:</p>
 
-<pre><code>-record(acl_entry, {?ITERATOR(acl),
-    entry_id,
-    acl_id,
-    accessor,
-    action}).
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="p">-</span><span class="ni">record</span><span class="p">(</span><span class="nl">access</span><span class="p">,</span> <span class="p">{</span><span class="o">?</span><span class="nv">ITERATOR</span><span class="p">(</span><span class="n">acl</span><span class="p">),</span>
+    <span class="n">entry_id</span><span class="p">,</span>
+    <span class="n">acl_id</span><span class="p">,</span>
+    <span class="n">accessor</span><span class="p">,</span>
+    <span class="n">action</span><span class="p">}).</span>
+</pre></div>
 
 <p>The layout of iterators are following:</p>
 
@@ -171,23 +198,29 @@ So you can inherit from the ITERATOR record just like that:</p>
 9 ...
 </code></pre>
 
-<p>This means your table will support add/remove operations to lists.</p>
+<p>This means your table will support add/remove linked list operations to lists.</p>
 
-<pre><code>1&gt; kvs:add(#user{id="mes@ua.fm"}).
-2&gt; kvs:add(#user{id="dox@ua.fm"}).
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">}).</span>
+<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}).</span>
+</pre></div>
 
 <p>Read the chain (undefined means all)</p>
 
-<pre><code>3&gt; kvs:entries(kvs:get(feed, users), user, undefined).
-[#user{id="mes@ua.fm"},#user{id="dox@ua.fm"}]
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">entries</span><span class="p">(</span><span class="nn">kvs</span><span class="p">:</span><span class="nb">get</span><span class="p">(</span><span class="n">feed</span><span class="p">,</span> <span class="n">user</span><span class="p">),</span> <span class="n">user</span><span class="p">,</span> <span class="n">undefined</span><span class="p">).</span>
+<span class="p">[</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">},</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}]</span>
+</pre></div>
+
+<p>or just</p>
+
+<div class="highlight highlight-erlang"><pre><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">entries</span><span class="p">(</span><span class="n">user</span><span class="p">).</span>
+<span class="p">[</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">},</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}]</span>
+</pre></div>
 
 <p>Read flat values by all keys from table:</p>
 
-<pre><code>4&gt; kvs:all(user).
-[#user{id="mes@ua.fm"},#user{id="dox@ua.fm"}]
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">all</span><span class="p">(</span><span class="n">user</span><span class="p">).</span>
+<span class="p">[</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">},</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}]</span>
+</pre></div>
 
 <h2>
 <a name="containers" class="anchor" href="#containers"><span class="octicon octicon-link"></span></a>Containers</h2>
@@ -209,31 +242,77 @@ of containers:</p>
 Riak and KAI backends don't need it. Group you table into table packages
 represented as modules with handle_notice API.</p>
 
-<pre><code>-module(kvs_box).
--inclue_lib("kvs/include/kvs.hrl").
--record(box,{id,user,email}).
--record(box_subscription,{who,whom}).
-init(Backend=store_mnesia) -&gt;
-    ?CREATE_TAB(box),
-    ?CREATE_TAB(box_subscription),
-    Backend:add_table_index(box, user),
-    Backend:add_table_index(box, email),
-    Backend:add_table_index(box_subscription, who),
-    Backend:add_table_index(box_subscription, whom);
-init(_) -&gt; ok.
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="p">-</span><span class="ni">module</span><span class="p">(</span><span class="n">kvs_feed</span><span class="p">).</span>
+<span class="p">-</span><span class="ni">inclue_lib</span><span class="p">(</span><span class="s">"kvs/include/kvs.hrl"</span><span class="p">).</span>
+
+<span class="nf">metainfo</span><span class="p">()</span> <span class="o">-&gt;</span> 
+    <span class="nl">#schema</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">kvs</span><span class="p">,</span><span class="n">tables</span><span class="o">=</span><span class="p">[</span>
+        <span class="nl">#table</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">feed</span><span class="p">,</span><span class="n">container</span><span class="o">=</span><span class="n">true</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="n">record_info</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">feed</span><span class="p">)},</span>
+        <span class="nl">#table</span><span class="p">{</span> <span class="n">name</span><span class="o">=</span><span class="n">entry</span><span class="p">,</span><span class="n">container</span><span class="o">=</span><span class="n">feed</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="n">record_info</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">entry</span><span class="p">),</span>
+                <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="n">feed_id</span><span class="p">,</span><span class="n">entry_id</span><span class="p">,</span><span class="n">from</span><span class="p">]},</span>
+        <span class="nl">#table</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">comment</span><span class="p">,</span><span class="n">container</span><span class="o">=</span><span class="n">feed</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="n">record_info</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">comment</span><span class="p">),</span>
+                <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="n">entry_id</span><span class="p">,</span><span class="n">author_id</span><span class="p">]}</span> <span class="p">]}.</span>
+</pre></div>
 
 <p>And plug it into schema config:</p>
 
-<pre><code>{kvs, {schema,[kvs_user,kvs_acl,kvs_account,...,kvs_box]}},
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="p">{</span><span class="n">kvs</span><span class="p">,</span> <span class="p">{</span><span class="n">schema</span><span class="p">,[</span><span class="n">kvs_user</span><span class="p">,</span><span class="n">kvs_acl</span><span class="p">,</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">kvs_subscription</span><span class="p">]}},</span>
+</pre></div>
 
 <p>And on database init</p>
 
-<pre><code>1&gt; kvs:join().
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">join</span><span class="p">().</span>
+</pre></div>
 
 <p>It will create your custom schema.</p>
+
+<h2>
+<a name="business-logic" class="anchor" href="#business-logic"><span class="octicon octicon-link"></span></a>Business Logic</h2>
+
+<p>Here is Consumer behavior handlers of KVS FEEDS supervised processes</p>
+
+<div class="highlight highlight-erlang"><pre><span class="nf">handle_notice</span><span class="p">(</span>  <span class="p">[</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="nv">Owner</span><span class="p">,</span><span class="n">entry</span><span class="p">,</span><span class="nv">Eid</span><span class="p">,</span><span class="n">add</span><span class="p">],</span>
+                <span class="p">[</span><span class="nl">#entry</span><span class="p">{</span><span class="n">feed_id</span><span class="o">=</span><span class="nv">Fid</span><span class="p">}</span><span class="o">=</span><span class="nv">Entry</span><span class="p">],</span>
+                <span class="nl">#state</span><span class="p">{</span><span class="n">feeds</span><span class="o">=</span><span class="nv">Feeds</span><span class="p">})</span> <span class="o">-&gt;</span>
+
+                <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="nf">keyfind</span><span class="p">(</span><span class="nv">Fid</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="nv">S</span><span class="nl">#state.feeds</span><span class="p">)</span> <span class="k">of</span>
+                    <span class="n">false</span> <span class="o">-&gt;</span> <span class="n">skip</span><span class="p">;</span>
+                    <span class="p">{_,_}</span> <span class="o">-&gt;</span> <span class="n">add_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span>
+                <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">S</span><span class="p">};</span>
+
+<span class="nf">handle_notice</span><span class="p">(</span>  <span class="p">[</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="nv">Owner</span><span class="p">,</span><span class="n">entry</span><span class="p">,{</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">FeedName</span><span class="p">},</span><span class="n">edit</span><span class="p">],</span>
+                <span class="p">[</span><span class="nl">#entry</span><span class="p">{</span><span class="n">feed_id</span><span class="o">=</span><span class="nv">Fid</span><span class="p">}</span><span class="o">=</span><span class="nv">Entry</span><span class="p">],</span>
+                <span class="nl">#state</span><span class="p">{</span><span class="n">feeds</span><span class="o">=</span><span class="nv">Feeds</span><span class="p">})</span> <span class="o">-&gt;</span>
+
+                <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="nf">keyfind</span><span class="p">(</span><span class="nv">FeedName</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nv">Feeds</span><span class="p">)</span> <span class="k">of</span>
+                    <span class="n">false</span> <span class="o">-&gt;</span> <span class="n">skip</span><span class="p">;</span>
+                    <span class="p">{_,</span><span class="nv">Fid</span><span class="p">}</span><span class="o">-&gt;</span> <span class="n">update_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span>
+                <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">S</span><span class="p">};</span>
+
+<span class="nf">handle_notice</span><span class="p">(</span>  <span class="p">[</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="nv">Owner</span><span class="p">,</span><span class="n">entry</span><span class="p">,</span><span class="nv">Eid</span><span class="p">,</span><span class="n">edit</span><span class="p">],</span>
+                <span class="p">[</span><span class="nl">#entry</span><span class="p">{</span><span class="n">feed_id</span><span class="o">=</span><span class="nv">Fid</span><span class="p">}</span><span class="o">=</span><span class="nv">Entry</span><span class="p">],</span>
+                <span class="nl">#state</span><span class="p">{</span><span class="n">feeds</span><span class="o">=</span><span class="nv">Feeds</span><span class="p">})</span> <span class="o">-&gt;</span>
+
+                <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="nf">keyfind</span><span class="p">(</span><span class="nv">Fid</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nv">Feeds</span><span class="p">)</span> <span class="k">of</span>
+                    <span class="n">false</span> <span class="o">-&gt;</span> <span class="n">skip</span><span class="p">;</span>
+                    <span class="p">{_,_}</span> <span class="o">-&gt;</span> <span class="n">update_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span>
+                <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">S</span><span class="p">};</span>
+</pre></div>
+
+<p>Here is the private implementation</p>
+
+<div class="highlight highlight-erlang"><pre><span class="nf">add_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="nv">E</span> <span class="o">=</span> <span class="nv">Entry</span><span class="nl">#entry</span><span class="p">{</span><span class="n">id</span> <span class="o">=</span> <span class="p">{</span><span class="nv">Eid</span><span class="p">,</span> <span class="nv">Fid</span><span class="p">},</span> <span class="n">entry_id</span> <span class="o">=</span> <span class="nv">Eid</span><span class="p">,</span> <span class="n">feeds</span><span class="o">=</span><span class="p">[</span><span class="n">comments</span><span class="p">]},</span>
+    <span class="nv">Added</span> <span class="o">=</span> <span class="k">case</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nv">E</span><span class="p">)</span> <span class="k">of</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span> <span class="nv">Err</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span><span class="nv">Err</span><span class="p">};</span> <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">En</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="nv">En</span> <span class="k">end</span><span class="p">,</span>
+    <span class="nn">msg</span><span class="p">:</span><span class="nf">notify</span><span class="p">([</span><span class="n">kvs_feed</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="p">{</span><span class="nv">Eid</span><span class="p">,</span> <span class="nv">Fid</span><span class="p">},</span> <span class="n">added</span><span class="p">],</span> <span class="p">[</span><span class="nv">Added</span><span class="p">]).</span>
+
+<span class="nf">update_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">...</span>
+</pre></div>
+
+<p>And that is how you can call it</p>
+
+<div class="highlight highlight-erlang"><pre><span class="nn">msg</span><span class="p">:</span><span class="nf">notify</span><span class="p">([</span><span class="n">kvs_feed</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="s">"maxim@synrc.com"</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="nv">Eid</span><span class="p">,</span> <span class="n">add</span><span class="p">],</span> <span class="p">[</span><span class="nl">#entry</span><span class="p">{}]).</span>
+</pre></div>
 
 <h2>
 <a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
