@@ -19,6 +19,8 @@
 -export([get/2,get/3,index/3]).                                   % read ops
 -export([load_db/1,save_db/1]).                                   % import/export
 
+-define(NOT_FOUND, notfound).
+
 start() -> DBA = ?DBA, DBA:start().
 stop() -> DBA = ?DBA, DBA:stop().
 
@@ -60,7 +62,7 @@ add(Record) when is_tuple(Record) ->
     Id = element(#iterator.id, Record),
 
     case kvs:get(element(1,Record), Id) of
-        {error, not_found} ->
+        {error, ?NOT_FOUND} ->
 
             Type = table_type(element(1,Record)),
             CName = element(#iterator.container, Record),
@@ -70,7 +72,7 @@ add(Record) when is_tuple(Record) ->
 
             Container = case kvs:get(CName, Cid) of
                 {ok,C} -> C;
-                {error, not_found} when Cid /= undefined ->
+                {error, ?NOT_FOUND} when Cid /= undefined ->
 
                     NC = setelement(#container.id,
                             list_to_tuple([CName|proplists:get_value(CName, kvs:containers())]), Cid),
@@ -88,7 +90,7 @@ add(Record) when is_tuple(Record) ->
                         undefined -> undefined;
                         Tid -> 
                             case kvs:get(Type, Tid) of
-                            {error, not_found} -> undefined;
+                            {error, ?NOT_FOUND} -> undefined;
                             {ok, Top} ->
                                 NewTop = setelement(#iterator.next, Top, Id),
                                 kvs:put(NewTop),
@@ -121,7 +123,7 @@ add(Record) when is_tuple(Record) ->
 
 remove(RecordName, RecordId) ->
     case kvs:get(RecordName, RecordId) of
-        {error, not_found} -> kvs:error("[kvs] can't remove ~p~n",[{RecordName,RecordId}]);
+        {error, ?NOT_FOUND} -> kvs:error("[kvs] can't remove ~p~n",[{RecordName,RecordId}]);
         {ok, E} ->
 
             Id = element(#iterator.id, E),

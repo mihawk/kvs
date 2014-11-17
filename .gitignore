@@ -2,3 +2,6 @@ ebin
 *.dets
 *.gz
 *.dump
+*.iml
+.idea
+deps

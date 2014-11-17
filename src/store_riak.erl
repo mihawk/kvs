@@ -11,32 +11,34 @@
 -include("acl.hrl").
 -compile(export_all).
 
+-define(RIAK_BACKEND, store_riak_helper).
+
 start() -> ok.
 stop() -> ok.
 version() -> {version,"KVS RIAK 2.0.2"}.
 join() -> initialize(), ok.
 join(_) -> initialize(), ok.
-initialize() -> riak:client_connect(node()).
+initialize() -> ok.
 
 dir() ->
-    {ok,Buckets} = riak_client:list_buckets(),
+    {ok,Buckets} = ?RIAK_BACKEND:list_buckets(),
     [{table,binary_to_list(X)}||X<-Buckets].
 
 riak_clean(Table) when is_list(Table)->
-    {ok,Keys}=riak_client:list_keys(erlang:list_to_binary(Table)),
-    [ riak_client:delete(erlang:list_to_binary(Table),Key) || Key <- Keys];
+    {ok,Keys}=?RIAK_BACKEND:list_keys(erlang:list_to_binary(Table)),
+    [ ?RIAK_BACKEND:delete(erlang:list_to_binary(Table),Key) || Key <- Keys];
 riak_clean(Table) ->
     [TableStr] = io_lib:format("~p",[Table]),
-    {ok,Keys}=riak_client:list_keys(erlang:list_to_binary(TableStr)),
+    {ok,Keys}=?RIAK_BACKEND:list_keys(erlang:list_to_binary(TableStr)),
     [ kvs:delete(Table,key_to_bin(Key)) || Key <- Keys].
 
 make_object(T) ->
     Bucket = element(1,T),
     Key = element(2,T),
-    Obj1 = riak_object:new(key_to_bin(Bucket), key_to_bin(Key), T),
+    Obj1 = riakc_obj:new(key_to_bin(Bucket), key_to_bin(Key), T),
     Indices = make_indices(T),
     Meta = dict:store(<<"index">>, Indices, dict:new()),
-    Obj2 = riak_object:update_metadata(Obj1, Meta),
+    Obj2 = riakc_obj:update_metadata(Obj1, Meta),
     error_logger:info_msg("RIAK PUT IDX ~p",[Indices]),
     Obj2.
 
@@ -66,26 +68,25 @@ put(Records) when is_list(Records) -> lists:foreach(fun riak_put/1, Records);
 put(Record) -> riak_put(Record).
 
 riak_put(Record) ->
-    {ok,C}=riak:local_client(),
     Object = make_object(Record),
-    Result = riak_client:put(Object,C),
+    Result = ?RIAK_BACKEND:put(Object),
     Result.
 
 put_if_none_match(Record) ->
     Object = make_object(Record),
-    case riak_client:put(Object, [if_none_match]) of
+    case ?RIAK_BACKEND:put(Object, [if_none_match]) of
         ok -> ok;
         Error -> Error end.
 
 update(Record, Object) ->
     NewObject = make_object(Record),
-    NewKey = riak_object:key(NewObject),
-    case riak_object:key(Object) of
+    NewKey = riakc_obj:key(NewObject),
+    case riakc_obj:key(Object) of
         NewKey ->
-            MetaInfo = riak_object:get_update_metatdata(NewObject),
-            UpdObject2 = riak_object:update_value(Object, Record),
-            UpdObject3 = riak_object:update_metadata(UpdObject2, MetaInfo),
-            case riak_client:put(UpdObject3, [if_not_modified]) of
+            MetaInfo = riakc_obj:get_update_metadata(NewObject),
+            UpdObject2 = riakc_obj:update_value(Object, Record),
+            UpdObject3 = riakc_obj:update_metadata(UpdObject2, MetaInfo),
+            case ?RIAK_BACKEND:put(UpdObject3, [if_not_modified]) of
                 ok -> ok;
                 Error -> Error
             end;
@@ -98,26 +99,22 @@ get(Tab, Key) ->
     riak_get(Bucket, IntKey).
 
 riak_get(Bucket,Key) ->
-    {ok,C} = riak:local_client(),
-    RiakAnswer = riak_client:get(Bucket,Key,C),
-    case RiakAnswer of
-        {ok, O} -> {ok, riak_object:get_value(O)};
-        X -> X end.
+    ?RIAK_BACKEND:get(Bucket,Key).
 
 get_for_update(Tab, Key) ->
-    case riak_client:get(key_to_bin(Tab), key_to_bin(Key)) of
-        {ok, O} -> {ok, riak_object:get_value(O), O};
+    case ?RIAK_BACKEND:get(key_to_bin(Tab), key_to_bin(Key)) of
+        {ok, O} -> {ok, riakc_obj:get_value(O), O};
         Error -> Error end.
 
 delete(Tab, Key) ->
     Bucket = key_to_bin(Tab),
     IntKey = key_to_bin(Key),
-    riak_client:delete(Bucket, IntKey).
+    ?RIAK_BACKEND:delete(Bucket, IntKey).
 
 delete_by_index(Tab, IndexId, IndexVal) ->
     Bucket = key_to_bin(Tab),
-    {ok, Keys} = riak_client:get_index(Bucket, {eq, IndexId, key_to_bin(IndexVal)}),
-    [riak_client:delete(Bucket, Key) || Key <- Keys].
+    {ok, Keys} = ?RIAK_BACKEND:get_index(Bucket, {IndexId, key_to_bin(IndexVal)}),
+    [?RIAK_BACKEND:delete(Bucket, Key) || Key <- Keys].
 
 key_to_bin(Key) ->
     if is_integer(Key) -> erlang:list_to_binary(integer_to_list(Key));
@@ -128,21 +125,21 @@ key_to_bin(Key) ->
 
 all(RecordName) ->
     RecordBin = key_to_bin(RecordName),
-    {ok,Keys} = riak_client:list_keys(RecordBin),
+    {ok,Keys} = ?RIAK_BACKEND:list_keys(RecordBin),
     Results = [ riak_get_raw({RecordBin, Key, riak_client}) || Key <- Keys ],
     [ Object || Object <- Results, Object =/= failure ].
 
 all_by_index(Tab, IndexId, IndexVal) ->
     Bucket = key_to_bin(Tab),
-    {ok, Keys} = riak_client:get_index(Bucket, {eq, IndexId, key_to_bin(IndexVal)}),
+    {ok, Keys} = ?RIAK_BACKEND:get_index(Bucket, {IndexId, key_to_bin(IndexVal)}),
     lists:foldl(fun(Key, Acc) ->
-        case riak_client:get(Bucket, Key, []) of
-            {ok, O} -> [riak_object:get_value(O) | Acc];
+        case ?RIAK_BACKEND:get(Bucket, Key, []) of
+            {ok, O} -> [riakc_obj:get_value(O) | Acc];
             {error, notfound} -> Acc end end, [], Keys).
 
-riak_get_raw({RecordBin, Key, Riak}) ->
-    case Riak:get(RecordBin, Key) of
-        {ok,O} -> riak_object:get_value(O);
+riak_get_raw({RecordBin, Key, _Riak}) ->
+    case ?RIAK_BACKEND:get(RecordBin, Key) of
+        {ok,O} -> riakc_obj:get_value(O);
         _ -> failure end.
 
 next_id(CounterId) -> next_id(CounterId, 1).
@@ -150,17 +147,17 @@ next_id(CounterId, Incr) -> next_id(CounterId, 0, Incr).
 next_id(CounterId, Default, Incr) ->
     CounterBin = key_to_bin(CounterId),
     {Object, Value, Options} =
-        case riak_client:get(key_to_bin(id_seq), CounterBin, []) of
+        case ?RIAK_BACKEND:get(key_to_bin(id_seq), CounterBin, []) of
             {ok, CurObj} ->
-                R = #id_seq{id = CurVal} = riak_object:get_value(CurObj),
+                R = #id_seq{id = CurVal} = riakc_obj:get_value(CurObj),
                 NewVal = CurVal + Incr,
-                Obj = riak_object:update_value(CurObj, R#id_seq{id = NewVal}),
+                Obj = riakc_obj:update_value(CurObj, R#id_seq{id = NewVal}),
                 {Obj, NewVal, [if_not_modified]};
             {error, notfound} ->
                 NewVal = Default + Incr,
-                Obj = riak_object:new(key_to_bin(id_seq), CounterBin, #id_seq{thing = CounterId, id = NewVal}),
+                Obj = riakc_obj:new(key_to_bin(id_seq), CounterBin, #id_seq{thing = CounterId, id = NewVal}),
                 {Obj, NewVal, [if_none_match]} end,
-    case riak_client:put(Object, Options) of
+    case ?RIAK_BACKEND:put(Object, Options) of
         ok -> Value;
         {error, _} -> next_id(CounterId, Incr) end.
 
