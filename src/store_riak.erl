@@ -102,8 +102,16 @@ riak_get(Bucket,Key) ->
     ?RIAK_BACKEND:get(Bucket,Key).
 
 get_for_update(Tab, Key) ->
-    case ?RIAK_BACKEND:get(key_to_bin(Tab), key_to_bin(Key)) of
-        {ok, O} -> {ok, riakc_obj:get_value(O), O};
+    case ?RIAK_BACKEND:get_raw(key_to_bin(Tab), key_to_bin(Key)) of
+        {ok, O} ->
+          Val = riakc_obj:get_value(O),
+          ObjVal = if
+                     is_binary(Val) ->
+                       binary_to_term(Val);
+                     true ->
+                       Val
+                   end,
+          {ok, ObjVal, O};
         Error -> Error end.
 
 delete(Tab, Key) ->
@@ -134,12 +142,12 @@ all_by_index(Tab, IndexId, IndexVal) ->
     {ok, Keys} = ?RIAK_BACKEND:get_index(Bucket, {IndexId, key_to_bin(IndexVal)}),
     lists:foldl(fun(Key, Acc) ->
         case ?RIAK_BACKEND:get(Bucket, Key, []) of
-            {ok, O} -> [riakc_obj:get_value(O) | Acc];
+            {ok, O} -> [O | Acc];
             {error, notfound} -> Acc end end, [], Keys).
 
 riak_get_raw({RecordBin, Key, _Riak}) ->
     case ?RIAK_BACKEND:get(RecordBin, Key) of
-        {ok,O} -> riakc_obj:get_value(O);
+        {ok,O} -> {ok, O};
         _ -> failure end.
 
 next_id(CounterId) -> next_id(CounterId, 1).
@@ -147,9 +155,16 @@ next_id(CounterId, Incr) -> next_id(CounterId, 0, Incr).
 next_id(CounterId, Default, Incr) ->
     CounterBin = key_to_bin(CounterId),
     {Object, Value, Options} =
-        case ?RIAK_BACKEND:get(key_to_bin(id_seq), CounterBin, []) of
+        case ?RIAK_BACKEND:get_raw(key_to_bin(id_seq), CounterBin, []) of
             {ok, CurObj} ->
-                R = #id_seq{id = CurVal} = riakc_obj:get_value(CurObj),
+              Val = riakc_obj:get_value(CurObj),
+              ObjVal = if
+                         is_binary(Val) ->
+                           binary_to_term(Val);
+                         true ->
+                           Val
+                       end,
+                R = #id_seq{id = CurVal} = ObjVal,
                 NewVal = CurVal + Incr,
                 Obj = riakc_obj:update_value(CurObj, R#id_seq{id = NewVal}),
                 {Obj, NewVal, [if_not_modified]};

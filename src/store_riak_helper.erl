@@ -6,7 +6,7 @@
 %% API
 -export([start_link/1]).
 
--export([list_buckets/0, list_keys/1, get/2, get/3, put/1, put/2, delete/2, get_index/2]).
+-export([list_buckets/0, list_keys/1, get/2, get/3, get_raw/2, get_raw/3, put/1, put/2, delete/2, get_index/2]).
 
 %% gen_server callbacks
 -export([init/1,
@@ -44,6 +44,12 @@ get(Bucket, Key) ->
 
 get(Bucket, Key, Options) ->
   gen_server:call(?SERVER, {get, Bucket, Key, Options}, infinity).
+
+get_raw(Bucket, Key) ->
+  gen_server:call(?SERVER, {get_raw, Bucket, Key}, infinity).
+
+get_raw(Bucket, Key, Options) ->
+  gen_server:call(?SERVER, {get_raw, Bucket, Key, Options}, infinity).
 
 put(Object) ->
   gen_server:call(?SERVER, {put, Object}, infinity).
@@ -114,6 +120,14 @@ handle_call({get, Bucket, Key, Options}, _From, State) ->
       Reply
   end,
   {reply, Res, State};
+
+handle_call({get_raw, Bucket, Key}, _From, State) ->
+  Reply = riakc_pb_socket:get(State#state.riak_connection, Bucket, Key),
+  {reply, Reply, State};
+
+handle_call({get_raw, Bucket, Key, Options}, _From, State) ->
+  Reply = riakc_pb_socket:get(State#state.riak_connection, Bucket, Key, Options),
+  {reply, Reply, State};
 
 handle_call({put, Object}, _From, State) ->
   Reply = riakc_pb_socket:put(State#state.riak_connection, Object),
