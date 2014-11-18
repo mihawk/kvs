@@ -39,7 +39,7 @@ make_object(T) ->
     Indices = make_indices(T),
     Meta = dict:store(<<"index">>, Indices, dict:new()),
     Obj2 = riakc_obj:update_metadata(Obj1, Meta),
-    error_logger:info_msg("RIAK PUT IDX ~p",[Indices]),
+    %error_logger:info_msg("RIAK PUT IDX ~p",[Indices]),
     Obj2.
 
 make_indices(#subscription{who=Who, whom=Whom}) -> [
