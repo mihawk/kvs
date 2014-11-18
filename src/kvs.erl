@@ -198,7 +198,7 @@ traversal(RecordType2, Start, Count, Direction)->
     {ok, R} ->  Prev = element(Direction, R),
                 Count1 = case Count of C when is_integer(C) -> C - 1; _-> Count end,
                 [R | traversal(RecordType2, Prev, Count1, Direction)];
-    Error -> [] end.
+    _Error -> [] end.
 
 entries(Name) -> Table = kvs:table(Name), entries(kvs:get(Table#table.container,Name), Name, undefined).
 entries(Name, Count) -> Table = kvs:table(Name), entries(kvs:get(Table#table.container,Name), Name, Count).
@@ -227,14 +227,14 @@ table_type(A) -> A.
 
 range(RecordName,Id) -> Ranges = kvs:config(RecordName), find(Ranges,RecordName,Id).
 
-find([],_,Id) -> [];
+find([],_,_Id) -> [];
 find([Range|T],RecordName,Id) -> 
      case lookup(Range,Id) of
           [] -> find(T,RecordName,Id);
           Name -> Name end.
 
 lookup(#interval{left=Left,right=Right,name=Name},Id) when Id =< Right, Id >= Left -> Name;
-lookup(#interval{},Id) -> [].
+lookup(#interval{},_Id) -> [].
 
 get(RecordName, Key) ->
     DBA=?DBA,
