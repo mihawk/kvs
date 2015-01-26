@@ -14,9 +14,10 @@ init([]) ->
     Backend = application:get_env(kvs, backend, mnesia),
     SupRes = case Backend of
       riak ->
+        PoolConf = application:get_env(kvs, riak_pool_conf, {kvs_pool, [{size, 1 }, {max_overflow, 0 }] }),
         Server = application:get_env(kvs, riak_server, "localhost"),
         Port = application:get_env(kvs, riak_pb_port, 8087),
-        Args = [{riak_server, Server}, {riak_pb_port, Port}],
+        Args = [{riak_pool_conf, PoolConf}, {riak_server, Server}, {riak_pb_port, Port}],
         RiakHelper = ?CHILD_WITH_ARGS(store_riak_helper, worker, [Args]),
         RestartStrategy = {one_for_one, 5, 60},
         Childs = [RiakHelper],

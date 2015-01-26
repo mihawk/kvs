@@ -18,7 +18,7 @@
 
 -define(SERVER, ?MODULE).
 
--record(state, { riak_connection = null }).
+-record(state, { riak_conn_pool = null }).
 
 %%%===================================================================
 %%% API
@@ -81,10 +81,15 @@ get_index(Bucket, Index) ->
 %% @end
 %%--------------------------------------------------------------------
 init(Args) ->
-  Server = proplists:get_value(riak_server, Args, "localhost"),
-  Port = proplists:get_value(riak_pb_port, Args, 8087),
-  {ok, Pid} = riakc_pb_socket:start(Server, Port),
-  {ok, #state{ riak_connection = Pid} }.
+  PoolSettings = proplists:get_value(riak_pool_conf, Args),
+  Server = proplists:get_value(riak_server, Args),
+  Port = proplists:get_value(riak_pb_port, Args),
+  {Pool, Settings} = PoolSettings,
+  StorageArgs = [{Pool, Settings, [{server, Server}, {port, Port}, {use_objects_encoding, false}]}],
+  riakc_wrapper:start(),
+  riakc_wrapper:startPool(StorageArgs),
+
+  {ok, #state{ riak_conn_pool = Pool} }.
 
 %%--------------------------------------------------------------------
 %% @private
@@ -94,15 +99,15 @@ init(Args) ->
 %% @end
 %%--------------------------------------------------------------------
 handle_call(list_buckets, _From, State) ->
-  Reply = riakc_pb_socket:list_buckets(State#state.riak_connection),
+  Reply = riakc_wrapper:getBucketsList(State#state.riak_conn_pool),
   {reply, Reply, State};
 
 handle_call({list_keys, Bucket}, _From, State) ->
-  Reply = riakc_pb_socket:list_keys(State#state.riak_connection, Bucket),
+  Reply = riakc_wrapper:getKeysList(State#state.riak_conn_pool, Bucket),
   {reply, Reply, State};
 
 handle_call({get, Bucket, Key}, _From, State) ->
-  Reply = riakc_pb_socket:get(State#state.riak_connection, Bucket, Key),
+  Reply = riakc_wrapper:getRawObject(State#state.riak_conn_pool, Bucket, Key),
   Res = case Reply of
     {ok, RawObj} ->
       {ok, decodeObj(riakc_obj:get_content_type(RawObj), riakc_obj:get_value(RawObj))};
@@ -112,7 +117,7 @@ handle_call({get, Bucket, Key}, _From, State) ->
   {reply, Res, State};
 
 handle_call({get, Bucket, Key, Options}, _From, State) ->
-  Reply = riakc_pb_socket:get(State#state.riak_connection, Bucket, Key, Options),
+  Reply = riakc_wrapper:getRawObject(State#state.riak_conn_pool, Bucket, Key, Options),
   Res = case Reply of
     {ok, RawObj} ->
       {ok, decodeObj(riakc_obj:get_content_type(RawObj), riakc_obj:get_value(RawObj))};
@@ -122,27 +127,27 @@ handle_call({get, Bucket, Key, Options}, _From, State) ->
   {reply, Res, State};
 
 handle_call({get_raw, Bucket, Key}, _From, State) ->
-  Reply = riakc_pb_socket:get(State#state.riak_connection, Bucket, Key),
+  Reply = riakc_wrapper:getRawObject(State#state.riak_conn_pool, Bucket, Key),
   {reply, Reply, State};
 
 handle_call({get_raw, Bucket, Key, Options}, _From, State) ->
-  Reply = riakc_pb_socket:get(State#state.riak_connection, Bucket, Key, Options),
+  Reply = riakc_wrapper:getRawObject(State#state.riak_conn_pool, Bucket, Key, Options),
   {reply, Reply, State};
 
 handle_call({put, Object}, _From, State) ->
-  Reply = riakc_pb_socket:put(State#state.riak_connection, Object),
+  Reply = riakc_wrapper:storeLocalObject(State#state.riak_conn_pool, Object),
   {reply, Reply, State};
 
 handle_call({put, Object, Options}, _From, State) ->
-  Reply = riakc_pb_socket:put(State#state.riak_connection, Object, Options),
+  Reply = riakc_wrapper:storeLocalObject(State#state.riak_conn_pool, Object, Options),
   {reply, Reply, State};
 
 handle_call({delete, Bucket, Key}, _From, State) ->
-  Reply = riakc_pb_socket:delete(State#state.riak_connection, Bucket, Key),
+  Reply = riakc_wrapper:deleteObject(State#state.riak_conn_pool, Bucket, Key),
   {reply, Reply, State};
 
 handle_call({get_index, Bucket, {IndexId, IndexVal}}, _From, State) ->
-  Reply = riakc_pb_socket:get_index_eq(State#state.riak_connection, Bucket, IndexId, IndexVal),
+  Reply = riakc_wrapper:searchBySecondaryIndex(State#state.riak_conn_pool, Bucket, IndexId, IndexVal),
   {reply, Reply, State};
 
 handle_call(_Request, _From, State) ->
