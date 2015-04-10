@@ -52,12 +52,14 @@
 <div class="highlight highlight-erlang"><pre>    {<span class="pl-c1">eredis</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/wooga/eredis<span class="pl-pds">"</span></span>, {<span class="pl-c1">tag</span>, <span class="pl-s"><span class="pl-pds">"</span>v1.0.6<span class="pl-pds">"</span></span>} }}</pre></div>
 
 <h2>
-<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+<a id="models" class="anchor" href="#models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Models</h2>
 
-<p>This is database handling application that hides database access
+<p>We have built with KVS a number of applications and came up with schema samples.
+We grouped schemas by three category. KVS hides database access behind backend drivers
 and provides high-level rich API to stored and extend following data:</p>
 
-<p>KVS</p>
+<h3>
+<a id="core" class="anchor" href="#core" aria-hidden="true"><span class="octicon octicon-link"></span></a>Core</h3>
 
 <ul>
 <li>Acl</li>
@@ -68,34 +70,53 @@ and provides high-level rich API to stored and extend following data:</p>
 <li>Comments</li>
 </ul>
 
-<p>KVS SOCIAL</p>
+<h3>
+<a id="banking" class="anchor" href="#banking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Banking</h3>
 
 <ul>
-<li>Groups</li>
-<li>Meetings</li>
-<li>Accounts</li>
-<li>Payments</li>
-<li>Products</li>
-<li>Purchases</li>
+<li>Account</li>
+<li>Customer</li>
+<li>Transaction</li>
+<li>Item</li>
+<li>Currency</li>
+<li>Program</li>
+<li>Card</li>
+<li>Cashback</li>
 </ul>
 
-<p>This Framework provides also a Feed Server Plugin for sequential consistency.
+<h3>
+<a id="social" class="anchor" href="#social" aria-hidden="true"><span class="octicon octicon-link"></span></a>Social</h3>
+
+<ul>
+<li>Group</li>
+<li>Meeting</li>
+<li>Payment</li>
+<li>Product</li>
+<li>Purchase</li>
+</ul>
+
+<h2>
+<a id="applications" class="anchor" href="#applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Applications</h2>
+
+<p>This Framework provides also a <strong>feed</strong> application for sequential consistency
+and <strong>cr</strong> application for chain replication database on top of <strong>kvs</strong>.
 All write requests with given object key will be handled by single processes
-in Feed Server so you may not worry about concurrent changes of user feed tops.</p>
+so you may not worry about concurrent changes of user feed tops.</p>
 
 <p>All write operations that are made to data with secondary indexes,
 i.e. not like linked lists could be potentially handled without feed_server.
-But some KV storages are not supporting secondary indexes add those backends carefully.</p>
+But some KV storages are not supporting secondary indexes so use these backends carefully.</p>
 
 <h2>
 <a id="store-backends" class="anchor" href="#store-backends" aria-hidden="true"><span class="octicon octicon-link"></span></a>Store Backends</h2>
 
-<p>Currently kvs includes following store backends:</p>
+<p>Currently <strong>kvs</strong> includes following store backends:</p>
 
 <ul>
 <li>Mnesia</li>
 <li>Riak</li>
 <li>KAI</li>
+<li>Filesystem</li>
 <li>Redis</li>
 </ul>
 
@@ -124,17 +145,17 @@ But some KV storages are not supporting secondary indexes add those backends car
 
 <div class="highlight highlight-erlang"><pre><span class="pl-c1">3</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">join</span>(<span class="pl-c1">'kvs@synrc.com'</span>).</pre></div>
 
-<p>In that case you don't need to do 'init_db'
-To check table packages included into the schema:</p>
+<p>In that case you don't need to initialize the database
+to check table packages included into the schema:</p>
 
 <div class="highlight highlight-erlang"><pre><span class="pl-c1">4</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">dir</span>().
 [{<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>id_seq<span class="pl-pds">"</span></span>},
- {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>subscription<span class="pl-pds">"</span></span>}, <span class="pl-k">&lt;-</span> <span class="pl-c1">2</span><span class="pl-c1">i</span>
- {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>feed<span class="pl-pds">"</span></span>}, <span class="pl-k">&lt;-</span> <span class="pl-c1">feed</span>
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>subscription<span class="pl-pds">"</span></span>},
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>feed<span class="pl-pds">"</span></span>},
  {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>comment<span class="pl-pds">"</span></span>},
  {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>entry<span class="pl-pds">"</span></span>},
  {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>access<span class="pl-pds">"</span></span>},
- {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>acl<span class="pl-pds">"</span></span>}, <span class="pl-k">&lt;-</span> <span class="pl-c1">feed</span>
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>acl<span class="pl-pds">"</span></span>},
  {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>user<span class="pl-pds">"</span></span>}]</pre></div>
 
 <h2>
@@ -249,7 +270,37 @@ represented as modules with handle_notice API.</p>
 <p>It will create your custom schema.</p>
 
 <h2>
-<a id="business-logic" class="anchor" href="#business-logic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Business Logic</h2>
+<a id="using-kvs-in-real-applications" class="anchor" href="#using-kvs-in-real-applications" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using KVS in real applications</h2>
+
+<p>Besides using KVS in production in a number of applications we have
+built on top of KVS several products. The first product is Chain
+Replication Database wit XA protocol. And second is social Feed
+Server for web shops and social sites.</p>
+
+<h3>
+<a id="chain-replication-database" class="anchor" href="#chain-replication-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Chain Replication Database</h3>
+
+<p>The <strong>kvs</strong> semantic is totally compatible with XA protocol.
+Adding the object with PUT means only putting to database
+while ADD operations provides linking to the chain's container.
+Also linking operation LINK is provided separately.</p>
+
+<div class="highlight highlight-erlang"><pre><span class="pl-en">dispatch</span>({<span class="pl-c1">prepare</span>,<span class="pl-v">_</span>,<span class="pl-v">_</span>,<span class="pl-smi">Tx</span>}, <span class="pl-k">#</span><span class="pl-en">state</span>{})  <span class="pl-k">-&gt;</span>
+    <span class="pl-en">kvs</span>:<span class="pl-en">info</span>(<span class="pl-k">?</span><span class="pl-en">MODULE</span>,<span class="pl-s"><span class="pl-pds">"</span>KVS PUT <span class="pl-c1">~p</span>:<span class="pl-c1">~p~n</span><span class="pl-pds">"</span></span>,[<span class="pl-en">element</span>(<span class="pl-c1">1</span>,<span class="pl-smi">Tx</span>),<span class="pl-en">element</span>(<span class="pl-c1">2</span>,<span class="pl-smi">Tx</span>)]),
+    <span class="pl-en">kvs</span>:<span class="pl-en">put</span>(<span class="pl-smi">Tx</span>);
+
+<span class="pl-en">dispatch</span>({<span class="pl-c1">commit</span>,<span class="pl-v">_</span>,<span class="pl-v">_</span>,<span class="pl-smi">Tx</span>}, <span class="pl-k">#</span><span class="pl-en">state</span>{})  <span class="pl-k">-&gt;</span>
+    <span class="pl-en">kvs</span>:<span class="pl-en">info</span>(<span class="pl-k">?</span><span class="pl-en">MODULE</span>,<span class="pl-s"><span class="pl-pds">"</span>KVS LINK <span class="pl-c1">~p</span>:<span class="pl-c1">~p~n</span><span class="pl-pds">"</span></span>,[<span class="pl-en">element</span>(<span class="pl-c1">1</span>,<span class="pl-smi">Tx</span>),<span class="pl-en">element</span>(<span class="pl-c1">2</span>,<span class="pl-smi">Tx</span>)]),
+    <span class="pl-en">kvs</span>:<span class="pl-en">link</span>(<span class="pl-smi">Tx</span>);
+
+<span class="pl-en">dispatch</span>({<span class="pl-c1">rollback</span>,<span class="pl-v">_</span>,<span class="pl-v">_</span>,<span class="pl-smi">Tx</span>}, <span class="pl-k">#</span><span class="pl-en">state</span>{})  <span class="pl-k">-&gt;</span>
+    <span class="pl-en">kvs</span>:<span class="pl-en">info</span>(<span class="pl-k">?</span><span class="pl-en">MODULE</span>,<span class="pl-s"><span class="pl-pds">"</span>KVS REMOVE <span class="pl-c1">~p</span>:<span class="pl-c1">~p~n</span><span class="pl-pds">"</span></span>,[<span class="pl-en">element</span>(<span class="pl-c1">1</span>,<span class="pl-smi">Tx</span>),<span class="pl-en">element</span>(<span class="pl-c1">2</span>,<span class="pl-smi">Tx</span>)]),
+    <span class="pl-en">kvs</span>:<span class="pl-en">remove</span>(<span class="pl-smi">Tx</span>);</pre></div>
+
+<p>See: <a href="https://github.com/spawnproc/cr">https://github.com/spawnproc/cr</a></p>
+
+<h3>
+<a id="feeds-server" class="anchor" href="#feeds-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feeds Server</h3>
 
 <p>Here is Consumer behavior handlers of KVS FEEDS supervised processes</p>
 
@@ -291,7 +342,10 @@ represented as modules with handle_notice API.</p>
 
 <p>And that is how you can call it</p>
 
-<div class="highlight highlight-erlang"><pre><span class="pl-en">msg</span>:<span class="pl-en">notify</span>([<span class="pl-c1">kvs_feed</span>, <span class="pl-c1">user</span>, <span class="pl-s"><span class="pl-pds">"</span>maxim@synrc.com<span class="pl-pds">"</span></span>, <span class="pl-c1">entry</span>, <span class="pl-smi">Eid</span>, <span class="pl-c1">add</span>], [<span class="pl-k">#</span><span class="pl-en">entry</span>{}]).</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-en">kvs</span>:<span class="pl-en">notify</span>([<span class="pl-c1">kvs_feed</span>, <span class="pl-c1">user</span>, <span class="pl-s"><span class="pl-pds">"</span>maxim@synrc.com<span class="pl-pds">"</span></span>, <span class="pl-c1">entry</span>, <span class="pl-smi">Eid</span>, <span class="pl-c1">add</span>],
+           [<span class="pl-k">#</span><span class="pl-en">entry</span>{}]).</pre></div>
+
+<p>See: <a href="https://github.com/synrc/feeds">https://github.com/synrc/feeds</a></p>
 
 <h2>
 <a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
