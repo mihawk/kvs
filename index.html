@@ -1,48 +1,36 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="KVS : Erlang Data Framework with Sequential Consistency" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>KVS</title>
+    <meta charset="UTF-8">
+    <title>KVS by synrc</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">KVS</h1>
+      <h2 class="project-tagline">Erlang Data Framework with Sequential Consistency</h2>
+      <a href="https://github.com/synrc/kvs" class="btn">View on GitHub</a>
+      <a href="https://github.com/synrc/kvs/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/synrc/kvs/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/synrc/kvs">View on GitHub</a>
-
-          <h1 id="project_title">KVS</h1>
-          <h2 id="project_tagline">Erlang Data Framework with Sequential Consistency</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/synrc/kvs/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/synrc/kvs/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a name="kvs-erlang-abstract-term-database" class="anchor" href="#kvs-erlang-abstract-term-database"><span class="octicon octicon-link"></span></a>KVS: Erlang Abstract Term Database</h1>
+    <section class="main-content">
+      <h1>
+<a id="kvs-erlang-abstract-term-database" class="anchor" href="#kvs-erlang-abstract-term-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>KVS: Erlang Abstract Term Database</h1>
 
 <p>Online Presentation: <a href="http://slid.es/maximsokhatsky/kvs">http://slid.es/maximsokhatsky/kvs</a></p>
 
 <h2>
-<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <ul>
 <li>Polymorphic Tuples</li>
 <li>Managing Linked-Lists</li>
-<li>Various Backends Support: KAI, Mnesia, Riak, CouchDB</li>
+<li>Various Backends Support: Mnesia, Riak, KAI, Redis</li>
 <li>Sequential Consistency via Feed Server</li>
 <li>Basic Schema for Social Sites and Accounting</li>
 <li>Extendable Schema</li>
@@ -50,16 +38,21 @@
 <li>Change Backends on-the-fly</li>
 <li>Supports Multiple backends at the same time</li>
 <li>Xen Ready</li>
-</ul><h2>
-<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+</ul>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
 
 <p>In rebar.config:</p>
 
-<pre><code>{kvs, ".*", {git, "git://github.com/synrc/kvs", "HEAD"}}
-</code></pre>
+<div class="highlight highlight-erlang"><pre>    {<span class="pl-c1">kvs</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/synrc/kvs<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>HEAD<span class="pl-pds">"</span></span>}}</pre></div>
+
+<p>Redis also need to add:</p>
+
+<div class="highlight highlight-erlang"><pre>    {<span class="pl-c1">eredis</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/wooga/eredis<span class="pl-pds">"</span></span>, {<span class="pl-c1">tag</span>, <span class="pl-s"><span class="pl-pds">"</span>v1.0.6<span class="pl-pds">"</span></span>} }}</pre></div>
 
 <h2>
-<a name="overview" class="anchor" href="#overview"><span class="octicon octicon-link"></span></a>Overview</h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
 
 <p>This is database handling application that hides database access
 and provides high-level rich API to stored and extend following data:</p>
@@ -73,7 +66,9 @@ and provides high-level rich API to stored and extend following data:</p>
 <li>Feeds</li>
 <li>Entries</li>
 <li>Comments</li>
-</ul><p>KVS SOCIAL</p>
+</ul>
+
+<p>KVS SOCIAL</p>
 
 <ul>
 <li>Groups</li>
@@ -82,7 +77,9 @@ and provides high-level rich API to stored and extend following data:</p>
 <li>Payments</li>
 <li>Products</li>
 <li>Purchases</li>
-</ul><p>This Framework provides also a Feed Server Plugin for sequential consistency.
+</ul>
+
+<p>This Framework provides also a Feed Server Plugin for sequential consistency.
 All write requests with given object key will be handled by single processes
 in Feed Server so you may not worry about concurrent changes of user feed tops.</p>
 
@@ -91,7 +88,7 @@ i.e. not like linked lists could be potentially handled without feed_server.
 But some KV storages are not supporting secondary indexes add those backends carefully.</p>
 
 <h2>
-<a name="store-backends" class="anchor" href="#store-backends"><span class="octicon octicon-link"></span></a>Store Backends</h2>
+<a id="store-backends" class="anchor" href="#store-backends" aria-hidden="true"><span class="octicon octicon-link"></span></a>Store Backends</h2>
 
 <p>Currently kvs includes following store backends:</p>
 
@@ -99,223 +96,205 @@ But some KV storages are not supporting secondary indexes add those backends car
 <li>Mnesia</li>
 <li>Riak</li>
 <li>KAI</li>
-</ul><h2>
-<a name="configuring" class="anchor" href="#configuring"><span class="octicon octicon-link"></span></a>Configuring</h2>
+<li>Redis</li>
+</ul>
+
+<h2>
+<a id="configuring" class="anchor" href="#configuring" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuring</h2>
 
 <p>First of all you need to tune your backend in the kvs application:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="p">{</span><span class="n">kvs</span><span class="p">,</span> <span class="p">{</span><span class="n">dba</span><span class="p">,</span><span class="n">store_kai</span><span class="p">}},</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre>{<span class="pl-c1">kvs</span>, [{<span class="pl-c1">dba</span>,<span class="pl-c1">store_mnesia</span>}]},</pre></div>
 
 <p>Try to check it:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">config</span><span class="p">(</span><span class="n">dba</span><span class="p">).</span>
-<span class="n">store_kai</span>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">1</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">config</span>(<span class="pl-c1">dba</span>).
+<span class="pl-c1">store_kai</span>
 
-<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">version</span><span class="p">().</span>
-<span class="p">{</span><span class="n">version</span><span class="p">,</span><span class="s">"KVS KAI PURE XEN"</span><span class="p">}</span>
-</pre></div>
+<span class="pl-c1">2</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">version</span>().
+{<span class="pl-c1">version</span>,<span class="pl-s"><span class="pl-pds">"</span>KVS KAI PURE XEN<span class="pl-pds">"</span></span>}</pre></div>
 
 <p>Create database for single node:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">join</span><span class="p">().</span>
-<span class="p">[</span><span class="n">kvs</span><span class="p">]</span> <span class="nv">Mnesia</span> <span class="nv">Init</span>
-<span class="n">ok</span>
-<span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">init_db</span><span class="p">().</span>
-<span class="p">[{</span><span class="s">"acl"</span><span class="p">,</span><span class="n">ok</span><span class="p">},{</span><span class="s">"feed"</span><span class="p">,</span><span class="n">ok</span><span class="p">}]</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">3</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">join</span>().
+[<span class="pl-c1">kvs</span>] <span class="pl-smi">Mnesia</span> <span class="pl-smi">Init</span>
+<span class="pl-c1">ok</span></pre></div>
 
-<p>'init_db' output the creations of containers.
-You can also create database by joining to existing cluster:</p>
+<p>You can also create database by joining to existing cluster:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">join</span><span class="p">(</span><span class="n">'kvs@synrc.com'</span><span class="p">).</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">3</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">join</span>(<span class="pl-c1">'kvs@synrc.com'</span>).</pre></div>
 
 <p>In that case you don't need to do 'init_db'
 To check table packages included into the schema:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">dir</span><span class="p">().</span>
-<span class="p">[{</span><span class="n">table</span><span class="p">,</span><span class="s">"id_seq"</span><span class="p">},</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"subscription"</span><span class="p">},</span> <span class="o">&lt;-</span> <span class="mi">2</span><span class="n">i</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"feed"</span><span class="p">},</span> <span class="o">&lt;-</span> <span class="n">feed</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"comment"</span><span class="p">},</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"entry"</span><span class="p">},</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"access"</span><span class="p">},</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"acl"</span><span class="p">},</span> <span class="o">&lt;-</span> <span class="n">feed</span>
- <span class="p">{</span><span class="n">table</span><span class="p">,</span><span class="s">"user"</span><span class="p">}]</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">4</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">dir</span>().
+[{<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>id_seq<span class="pl-pds">"</span></span>},
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>subscription<span class="pl-pds">"</span></span>}, <span class="pl-k">&lt;-</span> <span class="pl-c1">2</span><span class="pl-c1">i</span>
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>feed<span class="pl-pds">"</span></span>}, <span class="pl-k">&lt;-</span> <span class="pl-c1">feed</span>
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>comment<span class="pl-pds">"</span></span>},
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>entry<span class="pl-pds">"</span></span>},
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>access<span class="pl-pds">"</span></span>},
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>acl<span class="pl-pds">"</span></span>}, <span class="pl-k">&lt;-</span> <span class="pl-c1">feed</span>
+ {<span class="pl-c1">table</span>,<span class="pl-s"><span class="pl-pds">"</span>user<span class="pl-pds">"</span></span>}]</pre></div>
 
 <h2>
-<a name="operations" class="anchor" href="#operations"><span class="octicon octicon-link"></span></a>Operations</h2>
+<a id="operations" class="anchor" href="#operations" aria-hidden="true"><span class="octicon octicon-link"></span></a>Operations</h2>
 
 <p>Try to add some data:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="n">rr</span><span class="p">(</span><span class="n">kvs</span><span class="p">).</span>
-<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nb">put</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"maxim@synrc.com"</span><span class="p">}).</span>
-<span class="n">ok</span>
-<span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nb">get</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="s">"maxim@synrc.com"</span><span class="p">).</span>
-<span class="nl">#user</span><span class="p">{</span><span class="n">id</span> <span class="o">=</span> <span class="s">"maxim@synrc.com"</span><span class="p">,</span><span class="n">container</span> <span class="o">=</span> <span class="n">feed</span><span class="p">,...}</span>
-<span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nb">put</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"doxtop@synrc.com"</span><span class="p">}).</span>
-<span class="mi">5</span><span class="o">&gt;</span> <span class="nb">length</span><span class="p">(</span><span class="nn">kvs</span><span class="p">:</span><span class="nf">all</span><span class="p">(</span><span class="n">user</span><span class="p">)).</span>
-<span class="mi">2</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">1</span><span class="pl-k">&gt;</span> <span class="pl-en">rr</span>(<span class="pl-c1">kvs</span>).
+<span class="pl-c1">2</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">put</span>(<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>maxim@synrc.com<span class="pl-pds">"</span></span>}).
+<span class="pl-c1">ok</span>
+<span class="pl-c1">3</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">get</span>(<span class="pl-c1">user</span>,<span class="pl-s"><span class="pl-pds">"</span>maxim@synrc.com<span class="pl-pds">"</span></span>).
+<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>maxim@synrc.com<span class="pl-pds">"</span></span>,<span class="pl-smi">container</span> <span class="pl-k">=</span> <span class="pl-c1">feed</span>,...}
+<span class="pl-c1">4</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">put</span>(<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>doxtop@synrc.com<span class="pl-pds">"</span></span>}).
+<span class="pl-c1">5</span><span class="pl-k">&gt;</span> <span class="pl-en">length</span>(<span class="pl-en">kvs</span>:<span class="pl-en">all</span>(<span class="pl-c1">user</span>)).
+<span class="pl-c1">2</span></pre></div>
 
 <h2>
-<a name="polymorphic-records" class="anchor" href="#polymorphic-records"><span class="octicon octicon-link"></span></a>Polymorphic Records</h2>
+<a id="polymorphic-records" class="anchor" href="#polymorphic-records" aria-hidden="true"><span class="octicon octicon-link"></span></a>Polymorphic Records</h2>
 
 <p>The data in KVS represented as plain Erlang records. The first element of the tuple
 as usual indicates the name of bucket. And the second element usually corresponds
 to the index key field. Additional secondary indexes could be applied for stores
 that supports 2i, e.g. kai, mnesia, riak.</p>
 
-<pre><code>1 record_name -- user, groups, acl, etc... table name -- element(1, Rec).
-2 id          -- index key -- element(2, Rec).
-</code></pre>
-
 <h2>
-<a name="iterators" class="anchor" href="#iterators"><span class="octicon octicon-link"></span></a>Iterators</h2>
+<a id="iterators" class="anchor" href="#iterators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Iterators</h2>
 
 <p>All record could be chained into the double-linked lists in the database.
 So you can inherit from the ITERATOR record just like that:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="p">-</span><span class="ni">record</span><span class="p">(</span><span class="nl">access</span><span class="p">,</span> <span class="p">{</span><span class="o">?</span><span class="nv">ITERATOR</span><span class="p">(</span><span class="n">acl</span><span class="p">),</span>
-    <span class="n">entry_id</span><span class="p">,</span>
-    <span class="n">acl_id</span><span class="p">,</span>
-    <span class="n">accessor</span><span class="p">,</span>
-    <span class="n">action</span><span class="p">}).</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre>-<span class="pl-k">record</span>(<span class="pl-en">iterator</span>, {<span class="pl-smi">id</span>,<span class="pl-smi">version</span>,
+                   <span class="pl-smi">container</span>,<span class="pl-smi">feed_id</span>,<span class="pl-smi">prev</span>,
+                   <span class="pl-smi">next</span>,<span class="pl-smi">feeds</span><span class="pl-k">=</span>[],<span class="pl-smi">guard</span>,<span class="pl-smi">etc</span>}).</pre></div>
 
 <p>The layout of iterators are following:</p>
 
-<pre><code>1 record_name -- table name, like
-2 id          -- index key
-3 container   -- container name
-4 feed_id     -- feed id
-5 prev        -- poniter to previous object in list
-6 next        -- next
-7 feeds       -- subfeeds
-8 guard,      -- aux field
-9 ...
-</code></pre>
+<div class="highlight highlight-erlang"><pre><span class="pl-k">&gt;</span> <span class="pl-en">lists</span>:<span class="pl-en">zip</span>(<span class="pl-en">lists</span>:<span class="pl-en">seq</span>(<span class="pl-c1">1</span>,<span class="pl-en">length</span>((<span class="pl-en">kvs</span>:<span class="pl-en">table</span>(<span class="pl-c1">operation</span>))<span class="pl-k">#</span><span class="pl-en">table</span>.<span class="pl-smi">fields</span>)),
+            (<span class="pl-en">kvs</span>:<span class="pl-en">table</span>(<span class="pl-c1">operation</span>))<span class="pl-k">#</span><span class="pl-en">table</span>.<span class="pl-smi">fields</span>).
+
+[{<span class="pl-c1">1</span>,<span class="pl-c1">id</span>},
+ {<span class="pl-c1">2</span>,<span class="pl-c1">version</span>},
+ {<span class="pl-c1">3</span>,<span class="pl-c1">container</span>},
+ {<span class="pl-c1">4</span>,<span class="pl-c1">feed_id</span>},
+ {<span class="pl-c1">5</span>,<span class="pl-c1">prev</span>},
+ {<span class="pl-c1">6</span>,<span class="pl-c1">next</span>},
+ {<span class="pl-c1">7</span>,<span class="pl-c1">feeds</span>},
+ {<span class="pl-c1">8</span>,<span class="pl-c1">guard</span>},
+ {<span class="pl-c1">9</span>,<span class="pl-c1">etc</span>},
+ {<span class="pl-c1">10</span>,<span class="pl-c1">body</span>},
+ {<span class="pl-c1">11</span>,<span class="pl-c1">name</span>},
+ {<span class="pl-c1">12</span>,<span class="pl-c1">status</span>}]</pre></div>
 
 <p>This means your table will support add/remove linked list operations to lists.</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">}).</span>
-<span class="mi">2</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}).</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">1</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">add</span>(<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>mes@ua.fm<span class="pl-pds">"</span></span>}).
+<span class="pl-c1">2</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">add</span>(<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>dox@ua.fm<span class="pl-pds">"</span></span>}).</pre></div>
 
 <p>Read the chain (undefined means all)</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">3</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">entries</span><span class="p">(</span><span class="nn">kvs</span><span class="p">:</span><span class="nb">get</span><span class="p">(</span><span class="n">feed</span><span class="p">,</span> <span class="n">user</span><span class="p">),</span> <span class="n">user</span><span class="p">,</span> <span class="n">undefined</span><span class="p">).</span>
-<span class="p">[</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">},</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}]</span>
-</pre></div>
-
-<p>or just</p>
-
-<div class="highlight highlight-erlang"><pre><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">entries</span><span class="p">(</span><span class="n">user</span><span class="p">).</span>
-<span class="p">[</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">},</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}]</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">3</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">entries</span>(<span class="pl-en">kvs</span>:<span class="pl-en">get</span>(<span class="pl-c1">feed</span>, <span class="pl-c1">user</span>), <span class="pl-c1">user</span>, <span class="pl-c1">undefined</span>).
+[<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>mes@ua.fm<span class="pl-pds">"</span></span>},
+ <span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>dox@ua.fm<span class="pl-pds">"</span></span>}]</pre></div>
 
 <p>Read flat values by all keys from table:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">4</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">all</span><span class="p">(</span><span class="n">user</span><span class="p">).</span>
-<span class="p">[</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"mes@ua.fm"</span><span class="p">},</span><span class="nl">#user</span><span class="p">{</span><span class="n">id</span><span class="o">=</span><span class="s">"dox@ua.fm"</span><span class="p">}]</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">4</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">all</span>(<span class="pl-c1">user</span>).
+[<span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>mes@ua.fm<span class="pl-pds">"</span></span>},
+ <span class="pl-k">#</span><span class="pl-en">user</span>{<span class="pl-smi">id</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>dox@ua.fm<span class="pl-pds">"</span></span>}]</pre></div>
 
 <h2>
-<a name="containers" class="anchor" href="#containers"><span class="octicon octicon-link"></span></a>Containers</h2>
+<a id="containers" class="anchor" href="#containers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Containers</h2>
 
 <p>If you are using iterators records this automatically means you are using containers.
 Containers are just boxes for storing top/heads of the linked lists. Here is layout
 of containers:</p>
 
-<pre><code>1 record_name   -- container name
-2 id            -- unique id
-3 top           -- pointer to the list's head
-4 entries_count -- number of elements in list
-</code></pre>
+<div class="highlight highlight-erlang"><pre>-<span class="pl-k">record</span>(<span class="pl-en">container</span>, {<span class="pl-smi">id</span>,<span class="pl-smi">top</span>,<span class="pl-smi">count</span>}).</pre></div>
+
+<div class="highlight highlight-erlang"><pre><span class="pl-k">&gt;</span> <span class="pl-en">lists</span>:<span class="pl-en">zip</span>(<span class="pl-en">lists</span>:<span class="pl-en">seq</span>(<span class="pl-c1">1</span>,<span class="pl-en">length</span>((<span class="pl-en">kvs</span>:<span class="pl-en">table</span>(<span class="pl-c1">feed</span>))<span class="pl-k">#</span><span class="pl-en">table</span>.<span class="pl-smi">fields</span>)),
+            (<span class="pl-en">kvs</span>:<span class="pl-en">table</span>(<span class="pl-c1">feed</span>))<span class="pl-k">#</span><span class="pl-en">table</span>.<span class="pl-smi">fields</span>).
+[{<span class="pl-c1">1</span>,<span class="pl-c1">id</span>},
+ {<span class="pl-c1">2</span>,<span class="pl-c1">top</span>},
+ {<span class="pl-c1">3</span>,<span class="pl-c1">count</span>},
+ {<span class="pl-c1">4</span>,<span class="pl-c1">aclver</span>}]</pre></div>
 
 <h2>
-<a name="extending-schema" class="anchor" href="#extending-schema"><span class="octicon octicon-link"></span></a>Extending Schema</h2>
+<a id="extending-schema" class="anchor" href="#extending-schema" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extending Schema</h2>
 
 <p>Usually you need only specify custom mnesia indexes and tables tuning.
-Riak and KAI backends don't need it. Group you table into table packages
+Riak, KAI and Redis backends don't need it. Group you table into table packages
 represented as modules with handle_notice API.</p>
 
-<div class="highlight highlight-erlang"><pre><span class="p">-</span><span class="ni">module</span><span class="p">(</span><span class="n">kvs_feed</span><span class="p">).</span>
-<span class="p">-</span><span class="ni">inclue_lib</span><span class="p">(</span><span class="s">"kvs/include/kvs.hrl"</span><span class="p">).</span>
+<div class="highlight highlight-erlang"><pre>-<span class="pl-k">module</span>(<span class="pl-en">kvs_feed</span>).
+-<span class="pl-k">inclue_lib</span>(<span class="pl-s"><span class="pl-pds">"</span>kvs/include/kvs.hrl<span class="pl-pds">"</span></span>).
 
-<span class="nf">metainfo</span><span class="p">()</span> <span class="o">-&gt;</span> 
-    <span class="nl">#schema</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">kvs</span><span class="p">,</span><span class="n">tables</span><span class="o">=</span><span class="p">[</span>
-        <span class="nl">#table</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">feed</span><span class="p">,</span><span class="n">container</span><span class="o">=</span><span class="n">true</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="n">record_info</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">feed</span><span class="p">)},</span>
-        <span class="nl">#table</span><span class="p">{</span> <span class="n">name</span><span class="o">=</span><span class="n">entry</span><span class="p">,</span><span class="n">container</span><span class="o">=</span><span class="n">feed</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="n">record_info</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">entry</span><span class="p">),</span>
-                <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="n">feed_id</span><span class="p">,</span><span class="n">entry_id</span><span class="p">,</span><span class="n">from</span><span class="p">]},</span>
-        <span class="nl">#table</span><span class="p">{</span><span class="n">name</span><span class="o">=</span><span class="n">comment</span><span class="p">,</span><span class="n">container</span><span class="o">=</span><span class="n">feed</span><span class="p">,</span><span class="n">fields</span><span class="o">=</span><span class="n">record_info</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span><span class="n">comment</span><span class="p">),</span>
-                <span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="n">entry_id</span><span class="p">,</span><span class="n">author_id</span><span class="p">]}</span> <span class="p">]}.</span>
-</pre></div>
+<span class="pl-en">metainfo</span>() <span class="pl-k">-&gt;</span> 
+    <span class="pl-k">#</span><span class="pl-en">schema</span>{<span class="pl-smi">name</span><span class="pl-k">=</span><span class="pl-c1">kvs</span>,<span class="pl-smi">tables</span><span class="pl-k">=</span>[
+        <span class="pl-k">#</span><span class="pl-en">table</span>{<span class="pl-smi">name</span><span class="pl-k">=</span><span class="pl-c1">feed</span>,<span class="pl-smi">container</span><span class="pl-k">=</span><span class="pl-c1">true</span>,<span class="pl-smi">fields</span><span class="pl-k">=</span><span class="pl-en">record_info</span>(<span class="pl-c1">fields</span>,<span class="pl-c1">feed</span>)},
+        <span class="pl-k">#</span><span class="pl-en">table</span>{ <span class="pl-smi">name</span><span class="pl-k">=</span><span class="pl-c1">entry</span>,<span class="pl-smi">container</span><span class="pl-k">=</span><span class="pl-c1">feed</span>,<span class="pl-smi">fields</span><span class="pl-k">=</span><span class="pl-en">record_info</span>(<span class="pl-c1">fields</span>,<span class="pl-c1">entry</span>),
+                <span class="pl-smi">keys</span><span class="pl-k">=</span>[<span class="pl-c1">feed_id</span>,<span class="pl-c1">entry_id</span>,<span class="pl-c1">from</span>]},
+        <span class="pl-k">#</span><span class="pl-en">table</span>{<span class="pl-smi">name</span><span class="pl-k">=</span><span class="pl-c1">comment</span>,<span class="pl-smi">container</span><span class="pl-k">=</span><span class="pl-c1">feed</span>,<span class="pl-smi">fields</span><span class="pl-k">=</span><span class="pl-en">record_info</span>(<span class="pl-c1">fields</span>,<span class="pl-c1">comment</span>),
+                <span class="pl-smi">keys</span><span class="pl-k">=</span>[<span class="pl-c1">entry_id</span>,<span class="pl-c1">author_id</span>]} ]}.</pre></div>
 
 <p>And plug it into schema config:</p>
 
-<div class="highlight highlight-erlang"><pre><span class="p">{</span><span class="n">kvs</span><span class="p">,</span> <span class="p">{</span><span class="n">schema</span><span class="p">,[</span><span class="n">kvs_user</span><span class="p">,</span><span class="n">kvs_acl</span><span class="p">,</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">kvs_subscription</span><span class="p">]}},</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre>{<span class="pl-c1">kvs</span>, {<span class="pl-c1">schema</span>,[<span class="pl-c1">kvs_user</span>,<span class="pl-c1">kvs_acl</span>,<span class="pl-c1">kvs_feed</span>,<span class="pl-c1">kvs_subscription</span>]}},</pre></div>
 
 <p>And on database init</p>
 
-<div class="highlight highlight-erlang"><pre><span class="mi">1</span><span class="o">&gt;</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">join</span><span class="p">().</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-c1">1</span><span class="pl-k">&gt;</span> <span class="pl-en">kvs</span>:<span class="pl-en">join</span>().</pre></div>
 
 <p>It will create your custom schema.</p>
 
 <h2>
-<a name="business-logic" class="anchor" href="#business-logic"><span class="octicon octicon-link"></span></a>Business Logic</h2>
+<a id="business-logic" class="anchor" href="#business-logic" aria-hidden="true"><span class="octicon octicon-link"></span></a>Business Logic</h2>
 
 <p>Here is Consumer behavior handlers of KVS FEEDS supervised processes</p>
 
-<div class="highlight highlight-erlang"><pre><span class="nf">handle_notice</span><span class="p">(</span>  <span class="p">[</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="nv">Owner</span><span class="p">,</span><span class="n">entry</span><span class="p">,</span><span class="nv">Eid</span><span class="p">,</span><span class="n">add</span><span class="p">],</span>
-                <span class="p">[</span><span class="nl">#entry</span><span class="p">{</span><span class="n">feed_id</span><span class="o">=</span><span class="nv">Fid</span><span class="p">}</span><span class="o">=</span><span class="nv">Entry</span><span class="p">],</span>
-                <span class="nl">#state</span><span class="p">{</span><span class="n">feeds</span><span class="o">=</span><span class="nv">Feeds</span><span class="p">})</span> <span class="o">-&gt;</span>
+<div class="highlight highlight-erlang"><pre><span class="pl-en">handle_notice</span>(  [<span class="pl-c1">kvs_feed</span>,<span class="pl-c1">user</span>,<span class="pl-smi">Owner</span>,<span class="pl-c1">entry</span>,<span class="pl-smi">Eid</span>,<span class="pl-c1">add</span>],
+                [<span class="pl-k">#</span><span class="pl-en">entry</span>{<span class="pl-smi">feed_id</span><span class="pl-k">=</span><span class="pl-smi">Fid</span>}<span class="pl-k">=</span><span class="pl-smi">Entry</span>],
+                <span class="pl-k">#</span><span class="pl-en">state</span>{<span class="pl-smi">feeds</span><span class="pl-k">=</span><span class="pl-smi">Feeds</span>}) <span class="pl-k">-&gt;</span>
 
-                <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="nf">keyfind</span><span class="p">(</span><span class="nv">Fid</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="nv">S</span><span class="nl">#state.feeds</span><span class="p">)</span> <span class="k">of</span>
-                    <span class="n">false</span> <span class="o">-&gt;</span> <span class="n">skip</span><span class="p">;</span>
-                    <span class="p">{_,_}</span> <span class="o">-&gt;</span> <span class="n">add_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span>
-                <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">S</span><span class="p">};</span>
+                <span class="pl-k">case</span> <span class="pl-en">lists</span>:<span class="pl-en">keyfind</span>(<span class="pl-smi">Fid</span>,<span class="pl-c1">2</span>, <span class="pl-smi">S</span><span class="pl-k">#</span><span class="pl-en">state</span>.<span class="pl-smi">feeds</span>) <span class="pl-k">of</span>
+                    <span class="pl-c1">false</span> -&gt; <span class="pl-c1">skip</span>;
+                    {<span class="pl-v">_</span>,<span class="pl-v">_</span>} -&gt; <span class="pl-en">add_entry</span>(<span class="pl-smi">Eid</span>,<span class="pl-smi">Fid</span>,<span class="pl-smi">Entry</span>) <span class="pl-k">end</span>,
+                {<span class="pl-c1">noreply</span>, <span class="pl-smi">S</span>};
 
-<span class="nf">handle_notice</span><span class="p">(</span>  <span class="p">[</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="nv">Owner</span><span class="p">,</span><span class="n">entry</span><span class="p">,{</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">FeedName</span><span class="p">},</span><span class="n">edit</span><span class="p">],</span>
-                <span class="p">[</span><span class="nl">#entry</span><span class="p">{</span><span class="n">feed_id</span><span class="o">=</span><span class="nv">Fid</span><span class="p">}</span><span class="o">=</span><span class="nv">Entry</span><span class="p">],</span>
-                <span class="nl">#state</span><span class="p">{</span><span class="n">feeds</span><span class="o">=</span><span class="nv">Feeds</span><span class="p">})</span> <span class="o">-&gt;</span>
+<span class="pl-en">handle_notice</span>(  [<span class="pl-c1">kvs_feed</span>,<span class="pl-c1">user</span>,<span class="pl-smi">Owner</span>,<span class="pl-c1">entry</span>,{<span class="pl-smi">Eid</span>,<span class="pl-smi">FeedName</span>},<span class="pl-c1">edit</span>],
+                [<span class="pl-k">#</span><span class="pl-en">entry</span>{<span class="pl-smi">feed_id</span><span class="pl-k">=</span><span class="pl-smi">Fid</span>}<span class="pl-k">=</span><span class="pl-smi">Entry</span>],
+                <span class="pl-k">#</span><span class="pl-en">state</span>{<span class="pl-smi">feeds</span><span class="pl-k">=</span><span class="pl-smi">Feeds</span>}) <span class="pl-k">-&gt;</span>
 
-                <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="nf">keyfind</span><span class="p">(</span><span class="nv">FeedName</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="nv">Feeds</span><span class="p">)</span> <span class="k">of</span>
-                    <span class="n">false</span> <span class="o">-&gt;</span> <span class="n">skip</span><span class="p">;</span>
-                    <span class="p">{_,</span><span class="nv">Fid</span><span class="p">}</span><span class="o">-&gt;</span> <span class="n">update_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span>
-                <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">S</span><span class="p">};</span>
+                <span class="pl-k">case</span> <span class="pl-en">lists</span>:<span class="pl-en">keyfind</span>(<span class="pl-smi">FeedName</span>,<span class="pl-c1">1</span>,<span class="pl-smi">Feeds</span>) <span class="pl-k">of</span>
+                    <span class="pl-c1">false</span> -&gt; <span class="pl-c1">skip</span>;
+                    {<span class="pl-v">_</span>,<span class="pl-smi">Fid</span>}-&gt; <span class="pl-en">update_entry</span>(<span class="pl-smi">Eid</span>,<span class="pl-smi">Fid</span>,<span class="pl-smi">Entry</span>) <span class="pl-k">end</span>,
+                {<span class="pl-c1">noreply</span>, <span class="pl-smi">S</span>};
 
-<span class="nf">handle_notice</span><span class="p">(</span>  <span class="p">[</span><span class="n">kvs_feed</span><span class="p">,</span><span class="n">user</span><span class="p">,</span><span class="nv">Owner</span><span class="p">,</span><span class="n">entry</span><span class="p">,</span><span class="nv">Eid</span><span class="p">,</span><span class="n">edit</span><span class="p">],</span>
-                <span class="p">[</span><span class="nl">#entry</span><span class="p">{</span><span class="n">feed_id</span><span class="o">=</span><span class="nv">Fid</span><span class="p">}</span><span class="o">=</span><span class="nv">Entry</span><span class="p">],</span>
-                <span class="nl">#state</span><span class="p">{</span><span class="n">feeds</span><span class="o">=</span><span class="nv">Feeds</span><span class="p">})</span> <span class="o">-&gt;</span>
+<span class="pl-en">handle_notice</span>(  [<span class="pl-c1">kvs_feed</span>,<span class="pl-c1">user</span>,<span class="pl-smi">Owner</span>,<span class="pl-c1">entry</span>,<span class="pl-smi">Eid</span>,<span class="pl-c1">edit</span>],
+                [<span class="pl-k">#</span><span class="pl-en">entry</span>{<span class="pl-smi">feed_id</span><span class="pl-k">=</span><span class="pl-smi">Fid</span>}<span class="pl-k">=</span><span class="pl-smi">Entry</span>],
+                <span class="pl-k">#</span><span class="pl-en">state</span>{<span class="pl-smi">feeds</span><span class="pl-k">=</span><span class="pl-smi">Feeds</span>}) <span class="pl-k">-&gt;</span>
 
-                <span class="k">case</span> <span class="nn">lists</span><span class="p">:</span><span class="nf">keyfind</span><span class="p">(</span><span class="nv">Fid</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nv">Feeds</span><span class="p">)</span> <span class="k">of</span>
-                    <span class="n">false</span> <span class="o">-&gt;</span> <span class="n">skip</span><span class="p">;</span>
-                    <span class="p">{_,_}</span> <span class="o">-&gt;</span> <span class="n">update_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="k">end</span><span class="p">,</span>
-                <span class="p">{</span><span class="n">noreply</span><span class="p">,</span> <span class="nv">S</span><span class="p">};</span>
-</pre></div>
+                <span class="pl-k">case</span> <span class="pl-en">lists</span>:<span class="pl-en">keyfind</span>(<span class="pl-smi">Fid</span>, <span class="pl-c1">2</span>, <span class="pl-smi">Feeds</span>) <span class="pl-k">of</span>
+                    <span class="pl-c1">false</span> -&gt; <span class="pl-c1">skip</span>;
+                    {<span class="pl-v">_</span>,<span class="pl-v">_</span>} -&gt; <span class="pl-en">update_entry</span>(<span class="pl-smi">Eid</span>,<span class="pl-smi">Fid</span>,<span class="pl-smi">Entry</span>) <span class="pl-k">end</span>,
+                {<span class="pl-c1">noreply</span>, <span class="pl-smi">S</span>};</pre></div>
 
 <p>Here is the private implementation</p>
 
-<div class="highlight highlight-erlang"><pre><span class="nf">add_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="nv">E</span> <span class="o">=</span> <span class="nv">Entry</span><span class="nl">#entry</span><span class="p">{</span><span class="n">id</span> <span class="o">=</span> <span class="p">{</span><span class="nv">Eid</span><span class="p">,</span> <span class="nv">Fid</span><span class="p">},</span> <span class="n">entry_id</span> <span class="o">=</span> <span class="nv">Eid</span><span class="p">,</span> <span class="n">feeds</span><span class="o">=</span><span class="p">[</span><span class="n">comments</span><span class="p">]},</span>
-    <span class="nv">Added</span> <span class="o">=</span> <span class="k">case</span> <span class="nn">kvs</span><span class="p">:</span><span class="nf">add</span><span class="p">(</span><span class="nv">E</span><span class="p">)</span> <span class="k">of</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span> <span class="nv">Err</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="p">{</span><span class="n">error</span><span class="p">,</span><span class="nv">Err</span><span class="p">};</span> <span class="p">{</span><span class="n">ok</span><span class="p">,</span> <span class="nv">En</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="nv">En</span> <span class="k">end</span><span class="p">,</span>
-    <span class="nn">msg</span><span class="p">:</span><span class="nf">notify</span><span class="p">([</span><span class="n">kvs_feed</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="p">{</span><span class="nv">Eid</span><span class="p">,</span> <span class="nv">Fid</span><span class="p">},</span> <span class="n">added</span><span class="p">],</span> <span class="p">[</span><span class="nv">Added</span><span class="p">]).</span>
+<div class="highlight highlight-erlang"><pre><span class="pl-en">add_entry</span>(<span class="pl-smi">Eid</span>,<span class="pl-smi">Fid</span>,<span class="pl-smi">Entry</span>) <span class="pl-k">-&gt;</span>
+    <span class="pl-smi">E</span> <span class="pl-k">=</span> <span class="pl-smi">Entry</span><span class="pl-k">#</span><span class="pl-en">entry</span>{<span class="pl-smi">id</span> <span class="pl-k">=</span> {<span class="pl-smi">Eid</span>, <span class="pl-smi">Fid</span>}, <span class="pl-smi">entry_id</span> <span class="pl-k">=</span> <span class="pl-smi">Eid</span>, <span class="pl-smi">feeds</span><span class="pl-k">=</span>[<span class="pl-c1">comments</span>]},
+    <span class="pl-smi">Added</span> <span class="pl-k">=</span> <span class="pl-k">case</span> <span class="pl-en">kvs</span>:<span class="pl-en">add</span>(<span class="pl-smi">E</span>) <span class="pl-k">of</span> {<span class="pl-c1">error</span>, <span class="pl-smi">Err</span>} -&gt; {<span class="pl-c1">error</span>,<span class="pl-smi">Err</span>}; {<span class="pl-c1">ok</span>, <span class="pl-smi">En</span>} -&gt; <span class="pl-smi">En</span> <span class="pl-k">end</span>,
+    <span class="pl-en">msg</span>:<span class="pl-en">notify</span>([<span class="pl-c1">kvs_feed</span>, <span class="pl-c1">entry</span>, {<span class="pl-smi">Eid</span>, <span class="pl-smi">Fid</span>}, <span class="pl-c1">added</span>], [<span class="pl-smi">Added</span>]).
 
-<span class="nf">update_entry</span><span class="p">(</span><span class="nv">Eid</span><span class="p">,</span><span class="nv">Fid</span><span class="p">,</span><span class="nv">Entry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">...</span>
-</pre></div>
+<span class="pl-en">update_entry</span>(<span class="pl-smi">Eid</span>,<span class="pl-smi">Fid</span>,<span class="pl-smi">Entry</span>) <span class="pl-k">-&gt;</span> ...</pre></div>
 
 <p>And that is how you can call it</p>
 
-<div class="highlight highlight-erlang"><pre><span class="nn">msg</span><span class="p">:</span><span class="nf">notify</span><span class="p">([</span><span class="n">kvs_feed</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="s">"maxim@synrc.com"</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="nv">Eid</span><span class="p">,</span> <span class="n">add</span><span class="p">],</span> <span class="p">[</span><span class="nl">#entry</span><span class="p">{}]).</span>
-</pre></div>
+<div class="highlight highlight-erlang"><pre><span class="pl-en">msg</span>:<span class="pl-en">notify</span>([<span class="pl-c1">kvs_feed</span>, <span class="pl-c1">user</span>, <span class="pl-s"><span class="pl-pds">"</span>maxim@synrc.com<span class="pl-pds">"</span></span>, <span class="pl-c1">entry</span>, <span class="pl-smi">Eid</span>, <span class="pl-c1">add</span>], [<span class="pl-k">#</span><span class="pl-en">entry</span>{}]).</pre></div>
 
 <h2>
-<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
+<a id="credits" class="anchor" href="#credits" aria-hidden="true"><span class="octicon octicon-link"></span></a>Credits</h2>
 
 <ul>
 <li>Maxim Sokhatsky</li>
@@ -323,19 +302,20 @@ represented as modules with handle_notice API.</p>
 <li>Vladimir Kirillov</li>
 <li>Alex Kalenuk</li>
 <li>Sergey Polkovnikov</li>
-</ul><p>OM A HUM</p>
-      </section>
-    </div>
+<li>Andrey Martemyanov</li>
+</ul>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">KVS maintained by <a href="https://github.com/synrc">synrc</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+<p>OM A HUM</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/synrc/kvs">KVS</a> is maintained by <a href="https://github.com/synrc">synrc</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-    
+    </section>
 
+  
   </body>
 </html>
+
