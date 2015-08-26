@@ -1,25 +1,37 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>KVS by synrc</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">KVS</h1>
-      <h2 class="project-tagline">Erlang Data Framework with Sequential Consistency</h2>
-      <a href="https://github.com/synrc/kvs" class="btn">View on GitHub</a>
-      <a href="https://github.com/synrc/kvs/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/synrc/kvs/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+<html>
 
-    <section class="main-content">
-      <h1>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="KVS : Erlang Data Framework with Sequential Consistency">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>KVS</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/synrc/kvs">View on GitHub</a>
+
+          <h1 id="project_title">KVS</h1>
+          <h2 id="project_tagline">Erlang Data Framework with Sequential Consistency</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/synrc/kvs/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/synrc/kvs/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
 <a id="kvs-erlang-abstract-term-database" class="anchor" href="#kvs-erlang-abstract-term-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>KVS: Erlang Abstract Term Database</h1>
 
 <p>Online Presentation: <a href="http://slid.es/maximsokhatsky/kvs">http://slid.es/maximsokhatsky/kvs</a></p>
@@ -30,11 +42,11 @@
 <ul>
 <li>Polymorphic Tuples</li>
 <li>Managing Linked-Lists</li>
-<li>Various Backends Support: Mnesia, Riak, KAI, Redis</li>
+<li>Various Backends Support: Mnesia, Riak, KAI, Redis, MongoDB</li>
 <li>Sequential Consistency via Feed Server</li>
 <li>Basic Schema for Social Sites and Accounting</li>
 <li>Extendable Schema</li>
-<li>Supports Secondary Indexes for KAI, Mnesia and Riak</li>
+<li>Supports Secondary Indexes for KAI, Mnesia, Riak and MongoDB</li>
 <li>Change Backends on-the-fly</li>
 <li>Supports Multiple backends at the same time</li>
 <li>Xen Ready</li>
@@ -45,11 +57,28 @@
 
 <p>In rebar.config:</p>
 
-<div class="highlight highlight-erlang"><pre>    {<span class="pl-c1">kvs</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/synrc/kvs<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>HEAD<span class="pl-pds">"</span></span>}}</pre></div>
+<div class="highlight highlight-erlang"><pre>{<span class="pl-c1">kvs</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/synrc/kvs<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>HEAD<span class="pl-pds">"</span></span>}}</pre></div>
 
 <p>Redis also need to add:</p>
 
-<div class="highlight highlight-erlang"><pre>    {<span class="pl-c1">eredis</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/wooga/eredis<span class="pl-pds">"</span></span>, {<span class="pl-c1">tag</span>, <span class="pl-s"><span class="pl-pds">"</span>v1.0.6<span class="pl-pds">"</span></span>} }}</pre></div>
+<div class="highlight highlight-erlang"><pre>{<span class="pl-c1">eredis</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/wooga/eredis<span class="pl-pds">"</span></span>, {<span class="pl-c1">tag</span>, <span class="pl-s"><span class="pl-pds">"</span>v1.0.6<span class="pl-pds">"</span></span>} }}</pre></div>
+
+<p>MongoDB also need to add:</p>
+
+<div class="highlight highlight-erlang"><pre>{<span class="pl-c1">mongodb</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/comtihon/mongodb-erlang<span class="pl-pds">"</span></span>, {<span class="pl-c1">tag</span>, <span class="pl-s"><span class="pl-pds">"</span>master<span class="pl-pds">"</span></span>} }},
+{<span class="pl-c1">poolboy</span>, <span class="pl-s"><span class="pl-pds">"</span>.*<span class="pl-pds">"</span></span>, {<span class="pl-c1">git</span>, <span class="pl-s"><span class="pl-pds">"</span>git://github.com/devinus/poolboy<span class="pl-pds">"</span></span>, {<span class="pl-c1">tag</span>, <span class="pl-s"><span class="pl-pds">"</span>master<span class="pl-pds">"</span></span>} }}</pre></div>
+
+<p>In the above example poolboy is optional. MongoDB and Poolboy config example:</p>
+
+<div class="highlight highlight-erlang"><pre>{<span class="pl-c1">kvs</span>, [
+  {<span class="pl-c1">mongo</span>, [
+    {<span class="pl-c1">connection</span>, [{<span class="pl-c1">database</span>,&lt;&lt;<span class="pl-s"><span class="pl-pds">"</span>kvs<span class="pl-pds">"</span></span>&gt;&gt;}]},
+    {<span class="pl-c1">pool</span>, [{<span class="pl-c1">size</span>,<span class="pl-c1">10</span>},{<span class="pl-c1">max_overflow</span>,<span class="pl-c1">20</span>}]}
+  ]}
+]}</pre></div>
+
+<p>To disable poolboy exclude {pool, ...} from your sys.config. More information on the 
+configuring MongoDB and Poolboy can be found here: <a href="https://github.com/comtihon/mongodb-erlang">https://github.com/comtihon/mongodb-erlang</a>, <a href="https://github.com/devinus/poolboy">https://github.com/devinus/poolboy</a>.</p>
 
 <h2>
 <a id="models" class="anchor" href="#models" aria-hidden="true"><span class="octicon octicon-link"></span></a>Models</h2>
@@ -90,6 +119,7 @@ But some KV storages are not supporting secondary indexes so use these backends 
 <li>KAI</li>
 <li>Filesystem</li>
 <li>Redis</li>
+<li>MongoDB</li>
 </ul>
 
 <h2>
@@ -150,7 +180,7 @@ to check table packages included into the schema:</p>
 <p>The data in KVS represented as plain Erlang records. The first element of the tuple
 as usual indicates the name of bucket. And the second element usually corresponds
 to the index key field. Additional secondary indexes could be applied for stores
-that supports 2i, e.g. kai, mnesia, riak.</p>
+that supports 2i, e.g. kai, mnesia, riak, mongodb.</p>
 
 <h2>
 <a id="iterators" class="anchor" href="#iterators" aria-hidden="true"><span class="octicon octicon-link"></span></a>Iterators</h2>
@@ -332,16 +362,18 @@ Also linking operation LINK is provided separately.</p>
 </ul>
 
 <p>OM A HUM</p>
+      </section>
+    </div>
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/synrc/kvs">KVS</a> is maintained by <a href="https://github.com/synrc">synrc</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">KVS maintained by <a href="https://github.com/synrc">synrc</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
+    </div>
 
-    </section>
+    
 
-  
   </body>
 </html>
-
